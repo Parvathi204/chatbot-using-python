@@ -1,0 +1,44 @@
+import random
+import re
+from datetime import datetime
+
+# Predefined responses for common user queries
+responses = {
+    "greeting": ["Hello! How can I assist you today?", "Hi there! What can I do for you?", "Hello! How may I help you?"],
+    "farewell": ["Goodbye! Have a great day!", "See you later! Take care!", "Thank you for reaching out!"],
+    "default": ["I'm sorry, I didn't understand that.", "Can you please rephrase your question?", "I'm here to help. Can you clarify?"],
+    "thank_you": ["You're welcome!", "Glad to assist!", "Anytime!"],
+    "help": ["I'm here to assist with your queries. You can ask me about products, services, or any other information."],
+    "time": [f"The current time is {datetime.now().strftime('%H:%M:%S')}."]
+}
+
+# Define patterns for recognizing user intents
+patterns = {
+    "greeting": re.compile(r"\b(hello|hi|hey|good morning|good evening)\b", re.IGNORECASE),
+    "farewell": re.compile(r"\b(bye|goodbye|see you|exit)\b", re.IGNORECASE),
+    "thank_you": re.compile(r"\b(thank you|thanks|much appreciated)\b", re.IGNORECASE),
+    "help": re.compile(r"\b(help|assist|support)\b", re.IGNORECASE),
+    "time": re.compile(r"\b(time|current time|what time is it)\b", re.IGNORECASE)
+}
+
+# Function to identify intent
+def identify_intent(user_input):
+    for intent, pattern in patterns.items():
+        if pattern.search(user_input):
+            return intent
+    return "default"
+
+# Function to generate chatbot response
+def chatbot_response(user_input):
+    intent = identify_intent(user_input)
+    return random.choice(responses[intent])
+
+# Chatbot interaction logic
+print("Chatbot: Hello! I am your customer support assistant. Type 'exit' to end the chat.")
+while True:
+    user_input = input("You: ").strip()
+    if user_input.lower() == "exit":
+        print("Chatbot: Goodbye! Have a wonderful day!")
+        break
+    response = chatbot_response(user_input)
+    print(f"Chatbot: {response}")
